@@ -1,13 +1,39 @@
-import { LinearProgress, Slider, Typography } from "@mui/material";
+import { LinearProgress, Typography } from "@mui/material";
 import { ToDo } from "../types";
 
 import Box from "@mui/material/Box";
+import CheckIcon from "../icons/Check";
+import InProcessIcon from "../icons/Process";
 
-// TODO: Otros colores de fondo a utilizar: #F8DFC8, #C8EAF8, #C8F8CD
+//* Modify interface to add render's order and manage colors
+interface ToDoTypeModify extends ToDo {
+	order: number;
+}
 
-export default function TodoCard(data: ToDo) {
+const bgColors = ["#F8DFC8", "#C8EAF8", "#C8F8CD", "#F8EDC8"];
+
+const dateFormat: Intl.DateTimeFormatOptions = {
+	year: "numeric",
+	month: "long",
+	day: "2-digit",
+};
+
+/**
+ * This function recives the number value as priority and return the respective color
+ * @param priority Priority value. 1 - 5
+ */
+function getPriorityColor(priority: number) {
+	if (priority <= 2) {
+		return "secondary";
+	}
+	if (priority > 3) {
+		return "error";
+	}
+	return "warning";
+}
+
+export default function TodoCard(data: ToDoTypeModify) {
 	const priorityPercent = (data.priority * 100) / 5;
-	// const priorityColor =
 
 	return (
 		<Box
@@ -18,25 +44,26 @@ export default function TodoCard(data: ToDo) {
 			gap={2}
 			maxWidth={300}
 			sx={{
-				backgroundColor: "#F8EDC8",
+				backgroundColor: data.isComplete ? "#EEEEEE" : bgColors[data.order % 4],
 			}}
 		>
-			<Box display="flex" justifyContent="end">
-				IDK{/* TODO: Iconos Aqui  */}
+			<Box display="flex" justifyContent="space-between" alignItems="center">
+				<Typography variant="overline">
+					{new Date(data.creationDate).toLocaleDateString("es-ES", dateFormat)}
+				</Typography>
+				{data.isComplete ? (
+					<CheckIcon size="2em" />
+				) : (
+					<InProcessIcon size="2em" />
+				)}
 			</Box>
 			<Typography variant="h4">{data.title}</Typography>
 			<Typography>{data.content}</Typography>
 			<LinearProgress
-				color="secondary"
+				color={getPriorityColor(data.priority)}
 				variant="determinate"
 				value={priorityPercent}
 			/>
-			<LinearProgress
-				color="warning"
-				variant="determinate"
-				value={priorityPercent}
-			/>
-			<LinearProgress color="error" variant="determinate" value={100} />
 		</Box>
 	);
 }
