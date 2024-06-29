@@ -4,4 +4,5 @@ export interface ToDo {
 	content: string;
 	priority: number;
 	isComplete: boolean;
+	creationDate: string;
 }
