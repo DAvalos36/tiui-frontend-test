@@ -7,6 +7,7 @@ import { Box, Button, Container, Grid } from "@mui/material";
 import TodoCard from "./components/TodoCard";
 
 import useTodo from "./hooks/useTodo";
+import { useState } from "react";
 
 const dummyData = [
 	{
@@ -43,7 +44,7 @@ const dummyData = [
 		title: "prueba",
 		isComplete: false,
 		priority: 4,
-		creationDate: "2024-06-29T18:41:00.432Z",
+		creationDate: "2024-05-29T18:41:00.432Z",
 	},
 	{
 		id: "abc5",
@@ -52,12 +53,39 @@ const dummyData = [
 		title: "prueba",
 		isComplete: true,
 		priority: 5,
-		creationDate: "2024-06-29T18:41:00.432Z",
+		creationDate: "2024-06-25T18:41:00.432Z",
 	},
 ];
 
 function App() {
 	const todoState = useTodo(dummyData);
+	const [isOrderByPriority, setIsOrderByPriority] = useState(true);
+	const [filterBy, setFilterBy] = useState<"all" | "complete" | "incomplete">(
+		"all",
+	);
+
+	function getFilteredAndSortedTodos() {
+		let filteredTodos = todoState.value;
+
+		if (filterBy === "complete") {
+			filteredTodos = filteredTodos.filter((todo) => todo.isComplete);
+		} else if (filterBy === "incomplete") {
+			filteredTodos = filteredTodos.filter((todo) => !todo.isComplete);
+		}
+
+		if (isOrderByPriority) {
+			filteredTodos.sort((a, b) => a.priority - b.priority);
+		} else {
+			filteredTodos.sort(
+				(a, b) =>
+					new Date(a.creationDate).getTime() -
+					new Date(b.creationDate).getTime(),
+			);
+		}
+
+		return filteredTodos;
+	}
+
 	return (
 		<Container
 			sx={{
@@ -73,7 +101,7 @@ function App() {
 				borderRadius={5}
 				sx={{ backgroundColor: "#F9F9F9", padding: 2 }}
 			>
-				<Button>A</Button>
+				<Button onClick={() => setIsOrderByPriority((v) => !v)}>A</Button>
 			</Box>
 			<Grid
 				borderRadius={5}
@@ -82,7 +110,7 @@ function App() {
 				gap={2}
 				columns={{ sm: 1, md: 3 }}
 			>
-				{todoState.value.map((task, i) => {
+				{getFilteredAndSortedTodos().map((task, i) => {
 					return (
 						<Grid item key={task.id}>
 							<TodoCard order={i} {...task} />
