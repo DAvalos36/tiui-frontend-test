@@ -101,7 +101,10 @@ function App() {
 				setIsOrderByPriority={setIsOrderByPriority}
 			/>
 
-			<ToDoContainer getFilteredAndSortedTodos={getFilteredAndSortedTodos()} />
+			<ToDoContainer
+				getFilteredAndSortedTodos={getFilteredAndSortedTodos()}
+				todoState={todoState}
+			/>
 		</Container>
 	);
 }

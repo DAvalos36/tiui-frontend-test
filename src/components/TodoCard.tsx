@@ -1,13 +1,16 @@
-import { LinearProgress, Typography } from "@mui/material";
+import { Button, LinearProgress, Typography } from "@mui/material";
 import { ToDo } from "../types";
 
 import Box from "@mui/material/Box";
 import CheckIcon from "../icons/Check";
 import InProcessIcon from "../icons/Process";
+import { useTodoType } from "../hooks/useTodo";
 
 //* Modify interface to add render's order and manage colors
+//* And all todo state
 interface ToDoTypeModify extends ToDo {
 	order: number;
+	todoState: useTodoType;
 }
 
 const bgColors = ["#F8DFC8", "#C8EAF8", "#C8F8CD", "#F8EDC8"];
@@ -63,6 +66,7 @@ export default function TodoCard(data: ToDoTypeModify) {
 				variant="determinate"
 				value={priorityPercent}
 			/>
+			<Button onClick={() => data.todoState}>DELETE</Button>
 		</Box>
 	);
 }

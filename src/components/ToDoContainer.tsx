@@ -1,12 +1,14 @@
 import { Box } from "@mui/material";
 import { ToDo } from "../types";
 import TodoCard from "./TodoCard";
+import { useTodoType } from "../hooks/useTodo";
 
 type Props = {
 	getFilteredAndSortedTodos: ToDo[];
+	todoState: useTodoType;
 };
 
-function ToDoContainer({ getFilteredAndSortedTodos }: Props) {
+function ToDoContainer({ getFilteredAndSortedTodos, todoState }: Props) {
 	return (
 		<Box
 			borderRadius={5}
@@ -28,7 +30,9 @@ function ToDoContainer({ getFilteredAndSortedTodos }: Props) {
 			}}
 		>
 			{getFilteredAndSortedTodos.map((task, i) => {
-				return <TodoCard key={task.id} order={i} {...task} />;
+				return (
+					<TodoCard key={task.id} order={i} {...task} todoState={todoState} />
+				);
 			})}
 		</Box>
 	);
