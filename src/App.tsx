@@ -3,7 +3,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-import { Box, Button, Container, Grid } from "@mui/material";
+import { Box, Button, Container, MenuItem } from "@mui/material";
 import TodoCard from "./components/TodoCard";
 
 import useTodo from "./hooks/useTodo";
@@ -74,7 +74,7 @@ function App() {
 		}
 
 		if (isOrderByPriority) {
-			filteredTodos.sort((a, b) => a.priority - b.priority);
+			filteredTodos.sort((a, b) => b.priority - a.priority);
 		} else {
 			filteredTodos.sort(
 				(a, b) =>
@@ -88,36 +88,59 @@ function App() {
 
 	return (
 		<Container
+			maxWidth="lg"
 			sx={{
 				minHeight: "100vh",
 				display: "flex",
 				flexDirection: "column",
-				justifyContent: "space-evenly",
 			}}
 		>
 			<Box
 				display="flex"
 				justifyContent="space-between"
 				borderRadius={5}
-				sx={{ backgroundColor: "#F9F9F9", padding: 2 }}
+				sx={{
+					backgroundColor: "#F9F9F9",
+					padding: 2,
+					border: 1,
+					borderColor: "grey.300",
+				}}
 			>
 				<Button onClick={() => setIsOrderByPriority((v) => !v)}>A</Button>
+				<MenuItem value={20} onClick={() => setFilterBy("all")}>
+					Todas
+				</MenuItem>
+				<MenuItem value={21} onClick={() => setFilterBy("complete")}>
+					Completas
+				</MenuItem>
+				<MenuItem value={22} onClick={() => setFilterBy("incomplete")}>
+					Incompletas
+				</MenuItem>
 			</Box>
-			<Grid
+
+			<Box
 				borderRadius={5}
-				sx={{ backgroundColor: "#F9F9F9", padding: 2 }}
-				container
-				gap={2}
-				columns={{ sm: 1, md: 3 }}
+				marginY={5}
+				sx={{
+					backgroundColor: "#F9F9F9",
+					border: 1,
+					borderColor: "grey.300",
+
+					// ! Aqui NO se utilizo un componente Grid de MUI porque daba problemas el gap
+					padding: 2,
+					display: "grid",
+					gridTemplateColumns: "repeat(3, 1fr)",
+					gap: "1rem",
+
+					"@media (max-width: 600px)": {
+						gridTemplateColumns: "1fr",
+					},
+				}}
 			>
 				{getFilteredAndSortedTodos().map((task, i) => {
-					return (
-						<Grid item key={task.id}>
-							<TodoCard order={i} {...task} />
-						</Grid>
-					);
+					return <TodoCard key={task.id} order={i} {...task} />;
 				})}
-			</Grid>
+			</Box>
 		</Container>
 	);
 }

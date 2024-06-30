@@ -42,7 +42,6 @@ export default function TodoCard(data: ToDoTypeModify) {
 			borderRadius={5}
 			padding={2}
 			gap={2}
-			maxWidth={300}
 			sx={{
 				backgroundColor: data.isComplete ? "#EEEEEE" : bgColors[data.order % 4],
 			}}
