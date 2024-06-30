@@ -3,11 +3,12 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-import { Box, Button, Container, MenuItem } from "@mui/material";
-import TodoCard from "./components/TodoCard";
+import { Container } from "@mui/material";
 
 import useTodo from "./hooks/useTodo";
 import { useState } from "react";
+import ToDoContainer from "./components/ToDoContainer";
+import TopBar from "./components/TopBar";
 
 const dummyData = [
 	{
@@ -95,52 +96,12 @@ function App() {
 				flexDirection: "column",
 			}}
 		>
-			<Box
-				display="flex"
-				justifyContent="space-between"
-				borderRadius={5}
-				sx={{
-					backgroundColor: "#F9F9F9",
-					padding: 2,
-					border: 1,
-					borderColor: "grey.300",
-				}}
-			>
-				<Button onClick={() => setIsOrderByPriority((v) => !v)}>A</Button>
-				<MenuItem value={20} onClick={() => setFilterBy("all")}>
-					Todas
-				</MenuItem>
-				<MenuItem value={21} onClick={() => setFilterBy("complete")}>
-					Completas
-				</MenuItem>
-				<MenuItem value={22} onClick={() => setFilterBy("incomplete")}>
-					Incompletas
-				</MenuItem>
-			</Box>
+			<TopBar
+				setFilterBy={setFilterBy}
+				setIsOrderByPriority={setIsOrderByPriority}
+			/>
 
-			<Box
-				borderRadius={5}
-				marginY={5}
-				sx={{
-					backgroundColor: "#F9F9F9",
-					border: 1,
-					borderColor: "grey.300",
-
-					// ! Aqui NO se utilizo un componente Grid de MUI porque daba problemas el gap
-					padding: 2,
-					display: "grid",
-					gridTemplateColumns: "repeat(3, 1fr)",
-					gap: "1rem",
-
-					"@media (max-width: 600px)": {
-						gridTemplateColumns: "1fr",
-					},
-				}}
-			>
-				{getFilteredAndSortedTodos().map((task, i) => {
-					return <TodoCard key={task.id} order={i} {...task} />;
-				})}
-			</Box>
+			<ToDoContainer getFilteredAndSortedTodos={getFilteredAndSortedTodos()} />
 		</Container>
 	);
 }
