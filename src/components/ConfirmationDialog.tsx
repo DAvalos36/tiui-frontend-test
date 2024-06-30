@@ -9,14 +9,14 @@ import {
 
 type Props = {
 	show: boolean;
-	setShow: (v: string) => void;
+	setShow: (v: boolean) => void;
 	message: string;
 
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	action: (...args: any[]) => void;
 };
 
-function ConfirmationDialog({ message, setShow, show }: Props) {
+function ConfirmationDialog({ message, setShow, show, action }: Props) {
 	return (
 		<Dialog open={show}>
 			<DialogTitle>Confirmar</DialogTitle>
@@ -24,8 +24,8 @@ function ConfirmationDialog({ message, setShow, show }: Props) {
 				<DialogContentText>{message}</DialogContentText>
 			</DialogContent>
 			<DialogActions>
-				<Button onClick={() => setShow("")}>Cancel</Button>
-				<Button type="submit">Confirmar</Button>
+				<Button onClick={() => setShow(false)}>Cancelar</Button>
+				<Button onClick={action}>Confirmar</Button>
 			</DialogActions>
 		</Dialog>
 	);
