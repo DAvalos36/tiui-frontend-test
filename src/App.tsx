@@ -97,6 +97,7 @@ function App() {
 			}}
 		>
 			<TopBar
+				todoState={todoState}
 				setFilterBy={setFilterBy}
 				setIsOrderByPriority={setIsOrderByPriority}
 			/>
