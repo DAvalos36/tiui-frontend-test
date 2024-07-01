@@ -6,64 +6,25 @@ import "@fontsource/roboto/700.css";
 import { Container } from "@mui/material";
 
 import useTodo from "./hooks/useTodo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ToDoContainer from "./components/ToDoContainer";
 import TopBar from "./components/TopBar";
-
-const dummyData = [
-	{
-		id: "abc",
-		content:
-			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, at exercitationem. Minima quam corrupti vero eveniet ab obcaecati dicta recusandae. Odio quos est repellat mollitia, facere nesciunt at vitae temporibus?",
-		title: "prueba",
-		isComplete: false,
-		priority: 1,
-		creationDate: "2024-06-29T18:41:00.432Z",
-	},
-	{
-		id: "abc2",
-		content:
-			"Lorem ipsum dolorLorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, at exercitationem. Minima quam corrupti vero eveniet ab obcaecati dicta recusandae. Odio quos est repellat mollitia, facere nesciunt at vitae temporibus? sit amet consectetur adipisicing elit. Quisquam, at exercitationem. Minima quam corrupti vero eveniet ab obcaecati dicta recusandae. Odio quos est repellat mollitia, facere nesciunt at vitae temporibus?",
-		title: "prueba",
-		isComplete: false,
-		priority: 2,
-		creationDate: "2024-06-29T18:41:00.432Z",
-	},
-	{
-		id: "abc3",
-		content:
-			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, at exercitationem. Minima quam corrupti vero eveniet ab obcaecati dicta recusandae. Odio quos est repellat mollitia, facere nesciunt at vitae temporibus?",
-		title: "prueba",
-		isComplete: false,
-		priority: 3,
-		creationDate: "2024-06-29T18:41:00.432Z",
-	},
-	{
-		id: "abc4",
-		content:
-			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, at exercitationem. Minima quam corrupti vero eveniet ab obcaecati dicta recusandae. Odio quos est repellat mollitia, facere nesciunt at vitae temporibus? ",
-		title: "prueba",
-		isComplete: false,
-		priority: 4,
-		creationDate: "2024-05-29T18:41:00.432Z",
-	},
-	{
-		id: "abc5",
-		content:
-			"Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, at exercitationem. Minima quam corrupti vero eveniet ab obcaecati dicta recusandae. Odio quos est repellat mollitia, facere nesciunt at vitae temporibus? ",
-		title: "prueba",
-		isComplete: true,
-		priority: 5,
-		creationDate: "2024-06-25T18:41:00.432Z",
-	},
-];
+import { ToDo } from "./types";
 
 function App() {
-	const todoState = useTodo(dummyData);
+	//* load todoData from localStorage on app on init
+	const todoState = useTodo(
+		JSON.parse(localStorage.getItem("todoInfo") ?? "[]") as unknown as ToDo[],
+	);
 	const [isOrderByPriority, setIsOrderByPriority] = useState(true);
 	const [filterBy, setFilterBy] = useState<"all" | "complete" | "incomplete">(
 		"all",
 	);
+
+	// * This useEffect stores in local storage every change in todoData
+	useEffect(() => {
+		localStorage.setItem("todoInfo", JSON.stringify(todoState.value));
+	}, [todoState.value]);
 
 	function getFilteredAndSortedTodos() {
 		let filteredTodos = todoState.value;
