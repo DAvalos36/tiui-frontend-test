@@ -17,15 +17,20 @@ type Props = {
 };
 
 function ConfirmationDialog({ message, setShow, show, action }: Props) {
+	function onAction() {
+		action();
+		setShow(false);
+	}
+
 	return (
-		<Dialog open={show}>
+		<Dialog open={show} PaperProps={{ sx: { borderRadius: 5 } }}>
 			<DialogTitle>Confirmar</DialogTitle>
 			<DialogContent>
 				<DialogContentText>{message}</DialogContentText>
 			</DialogContent>
 			<DialogActions>
 				<Button onClick={() => setShow(false)}>Cancelar</Button>
-				<Button onClick={action}>Confirmar</Button>
+				<Button onClick={() => onAction()}>Confirmar</Button>
 			</DialogActions>
 		</Dialog>
 	);
