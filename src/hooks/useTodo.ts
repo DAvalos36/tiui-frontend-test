@@ -8,7 +8,19 @@ export default function useTodo(initialValue: ToDo[]): useTodoType {
 		setValue((list) => list.filter((item) => item.id !== todoId));
 	const update = (id: string, newData: ToDo) =>
 		setValue((list) => list.map((item) => (item.id === id ? newData : item)));
-	return { value, add, del, update, setValue } as const;
+
+	const setComplete = (id: string) =>
+		setValue((list) =>
+			list.map((item) => {
+				if (item.id === id) {
+					const updateItem = item;
+					updateItem.isComplete = true;
+					return updateItem;
+				}
+				return item;
+			}),
+		);
+	return { value, add, del, update, setValue, setComplete } as const;
 }
 
 export interface useTodoType {
@@ -16,5 +28,6 @@ export interface useTodoType {
 	add: (newTodo: ToDo) => void;
 	del: (todoId: string) => void;
 	update: (id: string, newData: ToDo) => void;
+	setComplete: (id: string) => void;
 	setValue: (list: ToDo[]) => void;
 }
