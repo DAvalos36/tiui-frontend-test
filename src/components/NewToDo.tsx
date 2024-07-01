@@ -22,6 +22,7 @@ function NewToDo({ showCreateModal, todoState }: Props) {
 		<Dialog
 			open={true}
 			PaperProps={{
+				sx: { borderRadius: 5 },
 				component: "form",
 				onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
 					event.preventDefault();
@@ -30,8 +31,9 @@ function NewToDo({ showCreateModal, todoState }: Props) {
 					formData.append("id", crypto.randomUUID());
 					formData.append("creationDate", new Date().toISOString());
 
-					formData.append("isComplete", "false");
 					const formJson = Object.fromEntries((formData as any).entries());
+
+					formJson.isComplete = false;
 					todoState.add(formJson);
 
 					// handleClose();

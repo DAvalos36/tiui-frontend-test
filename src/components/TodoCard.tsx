@@ -72,10 +72,11 @@ export default function TodoCard(data: ToDoTypeModify) {
 					backgroundColor: data.isComplete
 						? "#EEEEEE"
 						: bgColors[data.order % 4],
+					overflow: "hidden",
 				}}
 			>
 				{/* Card top part */}
-				<Box>
+				<Box sx={{ overflowWrap: "break-word" }}>
 					<Box
 						display="flex"
 						justifyContent="space-between"
