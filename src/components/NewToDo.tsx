@@ -14,13 +14,18 @@ import { useTodoType } from "../hooks/useTodo";
 
 type Props = {
 	showCreateModal: boolean;
+	handleCreateModal: (v: boolean) => void;
 	todoState: useTodoType;
 };
 
-function NewToDo({ showCreateModal, todoState }: Props) {
+function NewToDo({ showCreateModal, todoState, handleCreateModal }: Props) {
+	function handleClose() {
+		handleCreateModal(false);
+	}
+
 	return (
 		<Dialog
-			open={true}
+			open={showCreateModal}
 			PaperProps={{
 				sx: { borderRadius: 5 },
 				component: "form",
@@ -36,7 +41,7 @@ function NewToDo({ showCreateModal, todoState }: Props) {
 					formJson.isComplete = false;
 					todoState.add(formJson);
 
-					// handleClose();
+					handleClose();
 				},
 			}}
 		>
@@ -84,7 +89,7 @@ function NewToDo({ showCreateModal, todoState }: Props) {
 				/>
 			</DialogContent>
 			<DialogActions>
-				<Button>Cancel</Button>
+				<Button onClick={handleClose}>Cancel</Button>
 				<Button type="submit">Guardar</Button>
 			</DialogActions>
 		</Dialog>

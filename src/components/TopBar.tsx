@@ -1,6 +1,7 @@
-import { Box, Button, InputLabel, MenuItem, Select } from "@mui/material";
+import { Box, Button, ButtonGroup } from "@mui/material";
 import NewToDo from "./NewToDo";
 import { useTodoType } from "../hooks/useTodo";
+import { useState } from "react";
 
 type Props = {
 	setIsOrderByPriority: (v: boolean) => void;
@@ -10,9 +11,14 @@ type Props = {
 };
 
 function TopBar({ setFilterBy, setIsOrderByPriority, todoState }: Props) {
+	const [createNew, setCreateNew] = useState(false);
 	return (
 		<>
-			<NewToDo todoState={todoState} showCreateModal />
+			<NewToDo
+				todoState={todoState}
+				showCreateModal={createNew}
+				handleCreateModal={setCreateNew}
+			/>
 			<Box
 				display="flex"
 				justifyContent="space-between"
@@ -34,10 +40,38 @@ function TopBar({ setFilterBy, setIsOrderByPriority, todoState }: Props) {
 							backgroundColor: "#FCAC62",
 						},
 					}}
-					onClick={() => setIsOrderByPriority(true)}
+					onClick={() => setCreateNew(true)}
 				>
 					Agregar
 				</Button>
+
+				{/* ESTE */}
+				<Box display="flex" justifyContent={"end"}>
+					<ButtonGroup
+						sx={{ marginRight: 4 }}
+						color="secondary"
+						variant="contained"
+						aria-label="Basic button group"
+					>
+						<Button onClick={() => setIsOrderByPriority(true)}>
+							Prioridad
+						</Button>
+						<Button onClick={() => setIsOrderByPriority(false)}>
+							Creacion
+						</Button>
+					</ButtonGroup>
+					<ButtonGroup
+						color="secondary"
+						variant="contained"
+						aria-label="Basic button group"
+					>
+						<Button onClick={() => setFilterBy("all")}>Todos</Button>
+						<Button onClick={() => setFilterBy("complete")}>Completos</Button>
+						<Button onClick={() => setFilterBy("incomplete")}>
+							Incompletos
+						</Button>
+					</ButtonGroup>
+				</Box>
 			</Box>
 		</>
 	);
