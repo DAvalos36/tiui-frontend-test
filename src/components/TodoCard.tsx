@@ -1,4 +1,4 @@
-import { Button, LinearProgress, Typography } from "@mui/material";
+import { Button, IconButton, LinearProgress, Typography } from "@mui/material";
 import { ToDo } from "../types";
 
 import Box from "@mui/material/Box";
@@ -7,6 +7,7 @@ import InProcessIcon from "../icons/Process";
 import { useTodoType } from "../hooks/useTodo";
 import ConfirmationDialog from "./ConfirmationDialog";
 import { useState } from "react";
+import TrashIcon from "../icons/Trash";
 
 //* Modify interface to add render's order and manage colors
 //* And all todo state
@@ -56,12 +57,14 @@ export default function TodoCard(data: ToDoTypeModify) {
 				message={`¿Seguro que desea dar la tarea ${data.title} por terminada?`}
 				show={showComplete}
 				setShow={setShowComplete}
-				action={() => data.todoState.del(data.id)}
+				action={() => data.todoState.setComplete(data.id)}
 			/>
 
+			{/* Card container */}
 			<Box
 				display="flex"
 				flexDirection="column"
+				justifyContent="space-between"
 				borderRadius={5}
 				padding={2}
 				gap={2}
@@ -71,27 +74,58 @@ export default function TodoCard(data: ToDoTypeModify) {
 						: bgColors[data.order % 4],
 				}}
 			>
-				<Box display="flex" justifyContent="space-between" alignItems="center">
-					<Typography variant="overline">
-						{new Date(data.creationDate).toLocaleDateString(
-							"es-ES",
-							dateFormat,
+				{/* Card top part */}
+				<Box>
+					<Box
+						display="flex"
+						justifyContent="space-between"
+						alignItems="center"
+					>
+						<Typography variant="button">
+							{new Date(data.creationDate).toLocaleDateString(
+								"es-ES",
+								dateFormat,
+							)}
+						</Typography>
+						{data.isComplete ? (
+							<CheckIcon size="2em" />
+						) : (
+							<InProcessIcon size="2em" />
 						)}
-					</Typography>
-					{data.isComplete ? (
-						<CheckIcon size="2em" />
-					) : (
-						<InProcessIcon size="2em" />
-					)}
+					</Box>
+					{/* Todo title & content */}
+					<Typography variant="h4">{data.title}</Typography>
+					<Typography>{data.content}</Typography>
 				</Box>
-				<Typography variant="h4">{data.title}</Typography>
-				<Typography>{data.content}</Typography>
-				<LinearProgress
-					color={getPriorityColor(data.priority)}
-					variant="determinate"
-					value={priorityPercent}
-				/>
-				<Button onClick={() => setShowDelete(true)}>Eliminar</Button>
+
+				{/* Card bottom part */}
+				<Box>
+					<Typography variant="overline">Prioridad</Typography>
+					<LinearProgress
+						sx={{ marginBottom: 1 }}
+						color={getPriorityColor(data.priority)}
+						variant="determinate"
+						value={priorityPercent}
+					/>
+					{/* last buttons (complete & delete) */}
+					<Box display="flex" justifyContent="space-between">
+						{!data.isComplete ? (
+							<Button
+								variant="contained"
+								color="info"
+								sx={{ borderRadius: 2 }}
+								onClick={() => setShowComplete(true)}
+							>
+								Marcar completa
+							</Button>
+						) : (
+							<div />
+						)}
+						<IconButton color="error" onClick={() => setShowDelete(true)}>
+							<TrashIcon size="1em" />
+						</IconButton>
+					</Box>
+				</Box>
 			</Box>
 		</>
 	);
