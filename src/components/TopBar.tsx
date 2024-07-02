@@ -1,4 +1,12 @@
-import { Box, Button, ButtonGroup } from "@mui/material";
+import {
+	Box,
+	Button,
+	FormControl,
+	InputLabel,
+	MenuItem,
+	Select,
+	useMediaQuery,
+} from "@mui/material";
 import NewToDo from "./NewToDo";
 import { useTodoType } from "../hooks/useTodo";
 import { useState } from "react";
@@ -8,10 +16,20 @@ type Props = {
 	setFilterBy: (v: "all" | "complete" | "incomplete") => void;
 
 	todoState: useTodoType;
+	filterBy: "all" | "complete" | "incomplete";
+	isOrderByPriority: boolean;
 };
 
-function TopBar({ setFilterBy, setIsOrderByPriority, todoState }: Props) {
+function TopBar({
+	setFilterBy,
+	setIsOrderByPriority,
+	todoState,
+	filterBy,
+	isOrderByPriority,
+}: Props) {
 	const [createNew, setCreateNew] = useState(false);
+
+	const isMobile = useMediaQuery("(max-width:600px)");
 	return (
 		<>
 			<NewToDo
@@ -21,6 +39,7 @@ function TopBar({ setFilterBy, setIsOrderByPriority, todoState }: Props) {
 			/>
 			<Box
 				display="flex"
+				flexWrap="wrap"
 				justifyContent="space-between"
 				borderRadius={5}
 				sx={{
@@ -32,6 +51,7 @@ function TopBar({ setFilterBy, setIsOrderByPriority, todoState }: Props) {
 			>
 				<Button
 					variant="contained"
+					fullWidth={isMobile}
 					sx={{
 						backgroundColor: "#FA9639",
 						color: "white",
@@ -39,38 +59,54 @@ function TopBar({ setFilterBy, setIsOrderByPriority, todoState }: Props) {
 						"&:hover": {
 							backgroundColor: "#FCAC62",
 						},
+						marginBottom: isMobile ? 2 : 0,
 					}}
 					onClick={() => setCreateNew(true)}
 				>
 					Agregar
 				</Button>
 
-				{/* ESTE */}
-				<Box display="flex" justifyContent={"end"}>
-					<ButtonGroup
-						sx={{ marginRight: 4 }}
-						color="secondary"
-						variant="contained"
-						aria-label="Basic button group"
-					>
-						<Button onClick={() => setIsOrderByPriority(true)}>
-							Prioridad
-						</Button>
-						<Button onClick={() => setIsOrderByPriority(false)}>
-							Creacion
-						</Button>
-					</ButtonGroup>
-					<ButtonGroup
-						color="secondary"
-						variant="contained"
-						aria-label="Basic button group"
-					>
-						<Button onClick={() => setFilterBy("all")}>Todos</Button>
-						<Button onClick={() => setFilterBy("complete")}>Completos</Button>
-						<Button onClick={() => setFilterBy("incomplete")}>
-							Incompletos
-						</Button>
-					</ButtonGroup>
+				<Box
+					display="flex"
+					justifyContent={isMobile ? "space-between" : "end"}
+					flexGrow={1}
+				>
+					<FormControl size="small" fullWidth={isMobile}>
+						<InputLabel id="Order">Ordenar por</InputLabel>
+						<Select
+							labelId="Order"
+							value={isOrderByPriority ? 1 : 0}
+							label="Age"
+							sx={{
+								borderRadius: 3,
+								backgroundColor: "white",
+								marginRight: isMobile ? 0 : 5,
+							}}
+							onChange={(e) => {
+								setIsOrderByPriority(e.target.value === 1);
+							}}
+						>
+							<MenuItem value={1}>Prioridad</MenuItem>
+							<MenuItem value={0}>Fecha</MenuItem>
+						</Select>
+					</FormControl>
+					<FormControl size="small" fullWidth={isMobile}>
+						<InputLabel id="filter">Filtrar</InputLabel>
+						<Select
+							labelId="filter"
+							value={filterBy}
+							label="Age"
+							sx={{
+								borderRadius: 3,
+								backgroundColor: "white",
+							}}
+							onChange={(e) => setFilterBy(e.target.value)}
+						>
+							<MenuItem value={"all"}>Todos</MenuItem>
+							<MenuItem value={"complete"}>Completos</MenuItem>
+							<MenuItem value={"incomplete"}>Incompletos</MenuItem>
+						</Select>
+					</FormControl>
 				</Box>
 			</Box>
 		</>

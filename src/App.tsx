@@ -16,7 +16,7 @@ function App() {
 	const todoState = useTodo(
 		JSON.parse(localStorage.getItem("todoInfo") ?? "[]") as unknown as ToDo[],
 	);
-	const [isOrderByPriority, setIsOrderByPriority] = useState(true);
+	const [isOrderByPriority, setIsOrderByPriority] = useState(false);
 	const [filterBy, setFilterBy] = useState<"all" | "complete" | "incomplete">(
 		"all",
 	);
@@ -58,6 +58,8 @@ function App() {
 			}}
 		>
 			<TopBar
+				isOrderByPriority={isOrderByPriority}
+				filterBy={filterBy}
 				todoState={todoState}
 				setFilterBy={setFilterBy}
 				setIsOrderByPriority={setIsOrderByPriority}
