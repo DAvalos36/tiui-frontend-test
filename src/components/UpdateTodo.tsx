@@ -131,7 +131,7 @@ function UpdateTodo({ todoInfo, todoState, showEdit, setShowEdit }: Props) {
 				</Box>
 			</DialogContent>
 			<DialogActions>
-				<Button onClick={() => setShowEdit(false)}>Cancel</Button>
+				<Button onClick={() => setShowEdit(false)}>Cancelar</Button>
 				<Button type="submit">Guardar</Button>
 			</DialogActions>
 		</Dialog>

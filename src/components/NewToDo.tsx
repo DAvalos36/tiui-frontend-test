@@ -96,7 +96,7 @@ function NewToDo({ showCreateModal, todoState, handleCreateModal }: Props) {
 				/>
 			</DialogContent>
 			<DialogActions>
-				<Button onClick={handleClose}>Cancel</Button>
+				<Button onClick={handleClose}>Cancelar</Button>
 				<Button type="submit">Guardar</Button>
 			</DialogActions>
 		</Dialog>
