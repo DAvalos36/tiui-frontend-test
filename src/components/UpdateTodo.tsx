@@ -8,25 +8,27 @@ import {
 	DialogTitle,
 	Slider,
 	TextField,
+	ToggleButton,
+	ToggleButtonGroup,
 	Typography,
 } from "@mui/material";
 import { useTodoType } from "../hooks/useTodo";
+import { useState } from "react";
 import { ToDo } from "../types";
 
 type Props = {
-	showCreateModal: boolean;
-	handleCreateModal: (v: boolean) => void;
+	todoInfo: ToDo;
 	todoState: useTodoType;
+	showEdit: boolean;
+	setShowEdit: (v: boolean) => void;
 };
 
-function NewToDo({ showCreateModal, todoState, handleCreateModal }: Props) {
-	function handleClose() {
-		handleCreateModal(false);
-	}
+function UpdateTodo({ todoInfo, todoState, showEdit, setShowEdit }: Props) {
+	const [isComplete, setIsComplete] = useState(todoInfo.isComplete);
 
 	return (
 		<Dialog
-			open={showCreateModal}
+			open={showEdit}
 			PaperProps={{
 				sx: { borderRadius: 5 },
 				component: "form",
@@ -34,21 +36,16 @@ function NewToDo({ showCreateModal, todoState, handleCreateModal }: Props) {
 					event.preventDefault();
 					const formData = new FormData(event.currentTarget);
 
-					formData.append("id", crypto.randomUUID());
-					formData.append(
-						"creationDate",
-						// ! This prevent error format on input date-time
-						new Date()
-							.toISOString()
-							.replace("Z", ""),
-					);
+					formData.append("id", todoInfo.id);
 
+					//
+
+					// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 					const formJson = Object.fromEntries((formData as any).entries());
 
-					formJson.isComplete = false;
-					todoState.add(formJson as ToDo);
+					todoState.update(todoInfo.id, formJson as ToDo);
 
-					handleClose();
+					setShowEdit(false);
 				},
 			}}
 		>
@@ -58,6 +55,7 @@ function NewToDo({ showCreateModal, todoState, handleCreateModal }: Props) {
 				<TextField
 					autoFocus
 					required
+					defaultValue={todoInfo?.title}
 					margin="dense"
 					id="title"
 					name="title"
@@ -69,8 +67,8 @@ function NewToDo({ showCreateModal, todoState, handleCreateModal }: Props) {
 				<TextField
 					required
 					rows={4}
+					defaultValue={todoInfo?.content}
 					margin="dense"
-					id="content"
 					multiline
 					name="content"
 					label="Contenido"
@@ -82,9 +80,8 @@ function NewToDo({ showCreateModal, todoState, handleCreateModal }: Props) {
 				<Slider
 					min={1}
 					max={5}
-					aria-label="R"
 					name="priority"
-					defaultValue={1}
+					defaultValue={todoInfo?.priority}
 					valueLabelDisplay="auto"
 					marks={[
 						{ value: 1, label: "Poca" },
@@ -94,13 +91,51 @@ function NewToDo({ showCreateModal, todoState, handleCreateModal }: Props) {
 						{ value: 5, label: "Mucha" },
 					]}
 				/>
+				<Box
+					display={"flex"}
+					flexWrap="wrap"
+					alignItems="center"
+					justifyContent="space-between"
+				>
+					<TextField
+						margin="dense"
+						label="Fecha de creacion"
+						name="creationDate"
+						defaultValue={todoInfo?.creationDate}
+						variant="standard"
+						type="datetime-local"
+					/>
+					<ToggleButtonGroup
+						value={isComplete}
+						exclusive
+						onChange={(_, v) => setIsComplete(v)}
+						aria-label="text alignment"
+					>
+						<ToggleButton
+							value={true}
+							color="primary"
+							aria-label="left aligned"
+							sx={{ borderRadius: 3 }}
+						>
+							Terminada
+						</ToggleButton>
+						<ToggleButton
+							color="primary"
+							value={false}
+							aria-label="centered"
+							sx={{ borderRadius: 3 }}
+						>
+							Sin Terminar
+						</ToggleButton>
+					</ToggleButtonGroup>
+				</Box>
 			</DialogContent>
 			<DialogActions>
-				<Button onClick={handleClose}>Cancel</Button>
+				<Button onClick={() => setShowEdit(false)}>Cancel</Button>
 				<Button type="submit">Guardar</Button>
 			</DialogActions>
 		</Dialog>
 	);
 }
 
-export default NewToDo;
+export default UpdateTodo;

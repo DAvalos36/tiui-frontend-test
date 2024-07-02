@@ -8,6 +8,8 @@ import { useTodoType } from "../hooks/useTodo";
 import ConfirmationDialog from "./ConfirmationDialog";
 import { useState } from "react";
 import TrashIcon from "../icons/Trash";
+import UpdateTodo from "./UpdateTodo";
+import EditIcon from "../icons/Edit";
 
 //* Modify interface to add render's order and manage colors
 //* And all todo state
@@ -45,6 +47,8 @@ export default function TodoCard(data: ToDoTypeModify) {
 	const [showDelete, setShowDelete] = useState(false);
 	const [showComplete, setShowComplete] = useState(false);
 
+	const [showEdit, setShowEdit] = useState(false);
+
 	return (
 		<>
 			<ConfirmationDialog
@@ -58,6 +62,13 @@ export default function TodoCard(data: ToDoTypeModify) {
 				show={showComplete}
 				setShow={setShowComplete}
 				action={() => data.todoState.setComplete(data.id)}
+			/>
+
+			<UpdateTodo
+				todoState={data.todoState}
+				todoInfo={{ ...data }}
+				setShowEdit={setShowEdit}
+				showEdit={showEdit}
 			/>
 
 			{/* Card container */}
@@ -82,12 +93,17 @@ export default function TodoCard(data: ToDoTypeModify) {
 						justifyContent="space-between"
 						alignItems="center"
 					>
-						<Typography variant="button">
-							{new Date(data.creationDate).toLocaleDateString(
-								"es-ES",
-								dateFormat,
-							)}
-						</Typography>
+						<Box>
+							<IconButton color="error" onClick={() => setShowEdit(true)}>
+								<EditIcon size="1em" />
+							</IconButton>
+							<Typography variant="button">
+								{new Date(data.creationDate).toLocaleDateString(
+									"es-ES",
+									dateFormat,
+								)}
+							</Typography>
+						</Box>
 						{data.isComplete ? (
 							<CheckIcon size="2em" />
 						) : (
