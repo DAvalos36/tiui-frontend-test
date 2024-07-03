@@ -33,3 +33,33 @@ En esta prueba, deberás crear una aplicación web sencilla utilizando React jun
 
 1. **Fork a este repositorio:**
 2. **Cuanto todo este listo, genera un PR a con tu solución**
+
+## Instrucciones para Ejecutar el Proyecto
+Nota: En caso de contar con pnpm instalado puede ser utilizando remplazando  `pnpm` en lugar de `npm` en los siguientes comandos...
+
+Antes de ejecutar el proyecto, asegúrate de instalar todas las dependencias necesarias. Para ello, utiliza el siguiente comando:
+
+```sh
+npm install
+```
+### Modo desarrollo
+Este modo es el más rápido para iniciar el proyecto.
+
+Para ejecutar el proyecto en modo desarrollo, utiliza el siguiente comando:
+```sh
+npm run dev
+```
+### Modo transpilado/compilado
+Este modo hace que la aplicación sea más estable, aunque en una aplicación tan básica como esta, las diferencias pueden no ser muy notables.
+
+Para ejecutar el proyecto en modo transpilado (o compilado), sigue estos pasos:
+
+1. Transpila el proyecto:
+```sh
+npm run build
+```
+2. Una vez finalizado el proceso de transpilación, inicia el proyecto:
+
+```sh
+npm run preview
+```
