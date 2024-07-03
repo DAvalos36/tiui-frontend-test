@@ -13,7 +13,7 @@ import {
 	Typography,
 } from "@mui/material";
 import { useTodoType } from "../hooks/useTodo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ToDo } from "../types";
 
 type Props = {
@@ -25,6 +25,11 @@ type Props = {
 
 function UpdateTodo({ todoInfo, todoState, showEdit, setShowEdit }: Props) {
 	const [isComplete, setIsComplete] = useState(todoInfo.isComplete);
+
+	//* These prevents defacing between components state (isComplete) and parent state info
+	useEffect(() => {
+		setIsComplete(todoInfo.isComplete);
+	}, [showEdit]);
 
 	return (
 		<Dialog
@@ -42,6 +47,7 @@ function UpdateTodo({ todoInfo, todoState, showEdit, setShowEdit }: Props) {
 
 					// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 					const formJson = Object.fromEntries((formData as any).entries());
+					formJson.isComplete = isComplete;
 
 					todoState.update(todoInfo.id, formJson as ToDo);
 
@@ -94,7 +100,7 @@ function UpdateTodo({ todoInfo, todoState, showEdit, setShowEdit }: Props) {
 				<Box
 					display={"flex"}
 					flexWrap="wrap"
-					alignItems="center"
+					alignItems="end"
 					justifyContent="space-between"
 				>
 					<TextField
@@ -109,12 +115,11 @@ function UpdateTodo({ todoInfo, todoState, showEdit, setShowEdit }: Props) {
 						value={isComplete}
 						exclusive
 						onChange={(_, v) => setIsComplete(v)}
-						aria-label="text alignment"
 					>
 						<ToggleButton
 							value={true}
 							color="primary"
-							aria-label="left aligned"
+							size="small"
 							sx={{ borderRadius: 3 }}
 						>
 							Terminada
@@ -122,7 +127,7 @@ function UpdateTodo({ todoInfo, todoState, showEdit, setShowEdit }: Props) {
 						<ToggleButton
 							color="primary"
 							value={false}
-							aria-label="centered"
+							size="small"
 							sx={{ borderRadius: 3 }}
 						>
 							Sin Terminar
