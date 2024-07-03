@@ -100,7 +100,9 @@ function TopBar({
 								borderRadius: 3,
 								backgroundColor: "white",
 							}}
-							onChange={(e) => setFilterBy(e.target.value)}
+							onChange={(e) =>
+								setFilterBy(e.target.value as "all" | "complete" | "incomplete")
+							}
 						>
 							<MenuItem value={"all"}>Todos</MenuItem>
 							<MenuItem value={"complete"}>Completos</MenuItem>
